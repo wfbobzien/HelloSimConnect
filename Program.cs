@@ -1,5 +1,4 @@
 ﻿using Microsoft.FlightSimulator.SimConnect;
-using System.Numerics;
 using System.Runtime.InteropServices;
 
 namespace HelloSimConnect
@@ -22,6 +21,10 @@ namespace HelloSimConnect
             {
                 Console.WriteLine($"An unexpected exception occurred. Exception: {ex.Message}");
             }
+
+            Console.WriteLine("Press any key to exit the program.");
+
+            Console.ReadKey(true);
 
             simConnect?.Dispose();
         }
