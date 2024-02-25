@@ -22,11 +22,27 @@ namespace HelloSimConnect
                 Console.WriteLine($"An unexpected exception occurred. Exception: {ex.Message}");
             }
 
+            if (simConnect != null)
+            {
+                simConnect.OnRecvOpen += OnSimConnectOpen;
+            }
+
+            Console.WriteLine("Press any key to continue.");
+
+            Console.ReadKey(true);
+
+            simConnect?.ReceiveMessage();
+
             Console.WriteLine("Press any key to exit the program.");
 
             Console.ReadKey(true);
 
             simConnect?.Dispose();
+        }
+
+        private static void OnSimConnectOpen(SimConnect sender, SIMCONNECT_RECV_OPEN data)
+        {
+            Console.WriteLine($"SimConnect connection to application '{data.szApplicationName}' opened.");
         }
     }
 }
