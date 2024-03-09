@@ -5,7 +5,9 @@ namespace HelloSimConnect
 {
     internal class Program
     {
+        static bool isSimConnectInitialized = false;
         static bool isSimConnectOpen = false;
+
         static void Main()
         {
             SimConnect? simConnect = null;
@@ -29,10 +31,8 @@ namespace HelloSimConnect
 
                 simConnect.OnRecvQuit += OnSimConnectQuit;
                 
-                while (!isSimConnectOpen) simConnect.ReceiveMessage();
+                while (!isSimConnectInitialized || isSimConnectOpen) simConnect.ReceiveMessage();
 
-                while (isSimConnectOpen) simConnect.ReceiveMessage();
-                
                 Console.WriteLine("Press any key to exit the program.");
 
                 Console.ReadKey(true);
@@ -44,6 +44,8 @@ namespace HelloSimConnect
         private static void OnSimConnectOpen(SimConnect sender, SIMCONNECT_RECV_OPEN data)
         {
             Console.WriteLine($"SimConnect connection to application '{data.szApplicationName}' opened.");
+
+            isSimConnectInitialized = true;
             
             isSimConnectOpen = true;
         }
