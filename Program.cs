@@ -27,8 +27,12 @@ namespace HelloSimConnect
             {
                 simConnect.OnRecvOpen += OnSimConnectOpen;
 
-                while (!isSimConnectOpen) simConnect?.ReceiveMessage();
+                simConnect.OnRecvQuit += OnSimConnectQuit;
+                
+                while (!isSimConnectOpen) simConnect.ReceiveMessage();
 
+                while (isSimConnectOpen) simConnect.ReceiveMessage();
+                
                 Console.WriteLine("Press any key to exit the program.");
 
                 Console.ReadKey(true);
@@ -42,6 +46,13 @@ namespace HelloSimConnect
             Console.WriteLine($"SimConnect connection to application '{data.szApplicationName}' opened.");
             
             isSimConnectOpen = true;
+        }
+
+        private static void OnSimConnectQuit(SimConnect sender, SIMCONNECT_RECV data)
+        {
+            Console.WriteLine($"User quit the connected application.");
+
+            isSimConnectOpen = false;
         }
     }
 }
