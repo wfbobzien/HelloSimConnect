@@ -8,6 +8,11 @@ namespace HelloSimConnect
         static bool isSimConnectInitialized = false;
         static bool isSimConnectOpen = false;
 
+        enum EventId
+        {
+            FourSeconds = 1
+        }
+        
         static void Main()
         {
             SimConnect? simConnect = null;
@@ -30,7 +35,11 @@ namespace HelloSimConnect
                 simConnect.OnRecvOpen += OnSimConnectOpen;
 
                 simConnect.OnRecvQuit += OnSimConnectQuit;
-                
+
+                simConnect.SubscribeToSystemEvent(EventId.FourSeconds, "4sec");
+
+                simConnect.OnRecvEvent += OnSimConnectEvent;
+
                 while (!isSimConnectInitialized || isSimConnectOpen) simConnect.ReceiveMessage();
 
                 Console.WriteLine("Press any key to exit the program.");
@@ -55,6 +64,14 @@ namespace HelloSimConnect
             Console.WriteLine($"User quit the connected application.");
 
             isSimConnectOpen = false;
+        }
+
+        private static void OnSimConnectEvent(SimConnect sender, SIMCONNECT_RECV_EVENT data)
+        {
+            if (data.uEventID == ((uint)EventId.FourSeconds))
+            {
+                Console.WriteLine("System event: '4sec'");
+            }
         }
     }
 }
