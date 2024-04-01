@@ -81,17 +81,18 @@ namespace HelloSimConnect
                 case (uint)EventId.FourSeconds:
                     {
                         message = "System event: '4sec'";
+                        sender.SetSystemEventState(EventId.SixHertz, SIMCONNECT_STATE.ON);
                         break;
                     }
                 case (uint)EventId.OneSecond:
                     {
                         message = "System event: '1sec'";
+                        sender.SetSystemEventState(EventId.SixHertz, SIMCONNECT_STATE.OFF);
                         break;
                     }
                 case (uint)EventId.SixHertz:
                     {
                         message = "System event: '6Hz'";
-                        sender.SetSystemEventState(EventId.SixHertz, SIMCONNECT_STATE.OFF)
                         break;
                     }
             }
