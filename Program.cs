@@ -10,7 +10,9 @@ namespace HelloSimConnect
 
         enum EventId
         {
-            FourSeconds = 1
+            FourSeconds = 1,
+            OneSecond,
+            SixHertz
         }
         
         static void Main()
@@ -37,6 +39,10 @@ namespace HelloSimConnect
                 simConnect.OnRecvQuit += OnSimConnectQuit;
 
                 simConnect.SubscribeToSystemEvent(EventId.FourSeconds, "4sec");
+
+                simConnect.SubscribeToSystemEvent(EventId.OneSecond, "1sec");
+
+                simConnect.SubscribeToSystemEvent(EventId.SixHertz, "6Hz");
 
                 simConnect.OnRecvEvent += OnSimConnectEvent;
 
@@ -68,10 +74,29 @@ namespace HelloSimConnect
 
         private static void OnSimConnectEvent(SimConnect sender, SIMCONNECT_RECV_EVENT data)
         {
-            if (data.uEventID == ((uint)EventId.FourSeconds))
+            string message = "";
+
+            switch (data.uEventID)
             {
-                Console.WriteLine("System event: '4sec'");
+                case (uint)EventId.FourSeconds:
+                    {
+                        message = "System event: '4sec'";
+                        break;
+                    }
+                case (uint)EventId.OneSecond:
+                    {
+                        message = "System event: '1sec'";
+                        break;
+                    }
+                case (uint)EventId.SixHertz:
+                    {
+                        message = "System event: '6Hz'";
+                        sender.SetSystemEventState(EventId.SixHertz, SIMCONNECT_STATE.OFF)
+                        break;
+                    }
             }
+
+            Console.WriteLine(message);
         }
     }
 }
